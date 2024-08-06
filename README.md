@@ -1,3 +1,15 @@
+# Notes, Todo
+
+- refactoring most be done in the map marker area:
+    - how to manage to have the client location and the server side action?
+    - now we have a double code: first time loaded markers and locally added markers.
+    - also for adding markers we have double code to fix.
+    - fix lat lon json to simple two columns!
+- modal for new point
+- modal for marker list?
+- edit marker name and type (now only the location)
+- owner id and collab users
+
 # SolidStart
 
 Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);

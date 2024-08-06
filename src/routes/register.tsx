@@ -4,17 +4,16 @@ import { loginOrRegister } from "~/api";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);
-
   return (
     <main>
-      <h2 class="title">Login</h2>
+      <h2 class="title">Register</h2>
       <form action={loginOrRegister} method="post">
         <input
           type="hidden"
           name="redirectTo"
           value={props.params.redirectTo ?? "/"}
         />
-        <input type="hidden" name="loginType" value="login" checked={true} />
+        <input type="hidden" name="loginType" value="register" checked={true} />
         <div class="field">
           <label class="label">Username</label>
           <div class="control">
@@ -27,9 +26,8 @@ export default function Login(props: RouteSectionProps) {
             <input class="input" type="password" name="password" />
           </div>
         </div>
-
         <button class="button" type="submit">
-          Login
+          Register
         </button>
         <Show when={loggingIn.result}>
           <p class="help is-danger" role="alert" id="error-message">

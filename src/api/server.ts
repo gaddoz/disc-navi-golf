@@ -3,7 +3,7 @@ import { redirect } from "@solidjs/router";
 import { useSession } from "vinxi/http";
 import { eq } from "drizzle-orm";
 import { db } from "./db";
-import { Users } from "../../drizzle/schema";
+import { Courses, Points, Users } from "../../drizzle/schema";
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -74,4 +74,91 @@ export async function getUser() {
   } catch {
     throw logout();
   }
+}
+
+export async function getCourses() {
+  try {
+    const courses = (await db.select().from(Courses));
+    console.log('getCourses',courses);
+    return courses;
+  } catch (err) {
+    console.log('error getting courses at getCourses',err);
+    return [{id:0,name:'fake'}];
+  }
+}
+
+export async function addCourse(formData: FormData) {
+  const name: string = (formData.get('name') || 'course 1') as string;
+  type NewCourse = typeof Courses.$inferInsert;
+  const newCourse: NewCourse = { name: name };
+  const insertCourse = async (course: NewCourse) => {
+    return db.insert(Courses).values(course);
+  }
+  await insertCourse(newCourse);
+  throw redirect("/");
+}
+
+export async function getCourse(courseId: number){
+  try {
+    const course = (await db.select().from(Courses).where(eq(Courses.id, courseId)));
+    if(course.length > 1){
+      console.log('db error',courseId,course)
+    }
+    return course[0];
+  } catch (err) {
+    console.log('error fetching course at getCourse',err, courseId);
+    return {id:0,name:'fake'};
+  }
+}
+
+export async function getPoints(courseId: number){
+  try {
+    const points = (await db.select().from(Points).where(eq(Points.courseId, courseId)));
+    console.log('getPoints',points,points.length);
+    return points;
+  } catch (err) {
+    console.log('error fetching courses',err);
+    return [{id:0,name:'fake',type:'parking',location:'',courseId: 0}];
+  }
+}
+
+export async function addPoint(courseId: number | undefined, formData: FormData): Promise<number | bigint> {
+  const name: string = (formData.get('name') || 'tee 1') as string;
+  const type: string = (formData.get('type') || 'tee') as string;
+  const location: string = (formData.get('location') || '') as string;
+  type NewPoint = typeof Points.$inferInsert;
+  const newPoint: NewPoint = { name: name, type: type, location: location, courseId: courseId };
+  const insertPoint = async (point: NewPoint) => {
+    return db.insert(Points).values(point);
+  }
+  const res = await insertPoint(newPoint);
+  console.log('addPoint res',newPoint, res);
+  return res.lastInsertRowid;
+  // addPoint is used from clientOnly component: no redirect and returning the id
+  // throw redirect(`/courses/${courseId}`);
+}
+
+export async function deleteCourse(id: number){
+  await db.delete(Points).where(eq(Points.courseId, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
+  await db.delete(Courses).where(eq(Courses.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
+  throw redirect(`/`);
+}
+
+export async function deletePoint(id: number, courseId: number){
+  await db.delete(Points).where(eq(Points.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
+  throw redirect(`/courses/${courseId}`);
+}
+
+export async function updatePointLocation(id: number, lat: number, lon: number){
+  await db.update(Points)
+  .set({ location: `{"lat":${lat},"lon":${lon}}` })
+  .where(eq(Points.id, id))
+  console.log(' updatePointCoordinates done')
+}
+
+export async function updatePointInfo(id: number, name: string, type: string){
+  await db.update(Points)
+  .set({ name: name, type: type })
+  .where(eq(Points.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err));
+  console.log(' updatePointInfo done');
 }
