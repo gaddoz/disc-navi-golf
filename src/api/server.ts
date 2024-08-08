@@ -2,7 +2,7 @@
 import { redirect } from "@solidjs/router";
 import { useSession } from "vinxi/http";
 import { eq } from "drizzle-orm";
-import { db } from "./db";
+import { getDB } from "./db";
 import { Courses, Points, Users } from "../../drizzle/schema";
 
 function validateUsername(username: unknown) {
@@ -18,15 +18,15 @@ function validatePassword(password: unknown) {
 }
 
 async function login(username: string, password: string) {
-  const user = db.select().from(Users).where(eq(Users.username, username)).get();
+  const user = await getDB().select().from(Users).where(eq(Users.username, username)).get();
   if (!user || password !== user.password) throw new Error("Invalid login");
   return user;
 }
 
 async function register(username: string, password: string) {
-  const existingUser = db.select().from(Users).where(eq(Users.username, username)).get();
+  const existingUser = await getDB().select().from(Users).where(eq(Users.username, username)).get();
   if (existingUser) throw new Error("User already exists");
-  return db.insert(Users).values({ username, password }).returning().get();
+  return await getDB().insert(Users).values({ username, password }).returning().get();
 }
 
 function getSession() {
@@ -68,7 +68,7 @@ export async function getUser() {
   if (userId === undefined) throw redirect("/login");
 
   try {
-    const user = db.select().from(Users).where(eq(Users.id, userId)).get();
+    const user = await getDB().select().from(Users).where(eq(Users.id, userId)).get();
     if (!user) throw redirect("/login");
     return { id: user.id, username: user.username };
   } catch {
@@ -78,7 +78,7 @@ export async function getUser() {
 
 export async function getCourses() {
   try {
-    const courses = (await db.select().from(Courses));
+    const courses = (await getDB().select().from(Courses).all());
     console.log('getCourses',courses);
     return courses;
   } catch (err) {
@@ -92,7 +92,7 @@ export async function addCourse(formData: FormData) {
   type NewCourse = typeof Courses.$inferInsert;
   const newCourse: NewCourse = { name: name };
   const insertCourse = async (course: NewCourse) => {
-    return db.insert(Courses).values(course);
+    return await getDB().insert(Courses).values(course);
   }
   await insertCourse(newCourse);
   throw redirect("/");
@@ -100,7 +100,7 @@ export async function addCourse(formData: FormData) {
 
 export async function getCourse(courseId: number){
   try {
-    const course = (await db.select().from(Courses).where(eq(Courses.id, courseId)));
+    const course = (await getDB().select().from(Courses).where(eq(Courses.id, courseId)));
     if(course.length > 1){
       console.log('db error',courseId,course)
     }
@@ -113,7 +113,7 @@ export async function getCourse(courseId: number){
 
 export async function getPoints(courseId: number){
   try {
-    const points = (await db.select().from(Points).where(eq(Points.courseId, courseId)));
+    const points = (await getDB().select().from(Points).where(eq(Points.courseId, courseId)));
     console.log('getPoints',points,points.length);
     return points;
   } catch (err) {
@@ -129,35 +129,35 @@ export async function addPoint(courseId: number | undefined, formData: FormData)
   type NewPoint = typeof Points.$inferInsert;
   const newPoint: NewPoint = { name: name, type: type, location: location, courseId: courseId };
   const insertPoint = async (point: NewPoint) => {
-    return db.insert(Points).values(point);
+    return await getDB().insert(Points).values(point);
   }
   const res = await insertPoint(newPoint);
   console.log('addPoint res',newPoint, res);
-  return res.lastInsertRowid;
-  // addPoint is used from clientOnly component: no redirect and returning the id
-  // throw redirect(`/courses/${courseId}`);
+  // return res.lastInsertRowid;
+  // TODO: fix this!!!
+  return 1;
 }
 
 export async function deleteCourse(id: number){
-  await db.delete(Points).where(eq(Points.courseId, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
-  await db.delete(Courses).where(eq(Courses.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
+  await getDB().delete(Points).where(eq(Points.courseId, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
+  await getDB().delete(Courses).where(eq(Courses.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
   throw redirect(`/`);
 }
 
 export async function deletePoint(id: number, courseId: number){
-  await db.delete(Points).where(eq(Points.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
+  await getDB().delete(Points).where(eq(Points.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err))
   throw redirect(`/courses/${courseId}`);
 }
 
 export async function updatePointLocation(id: number, lat: number, lon: number){
-  await db.update(Points)
+  await getDB().update(Points)
   .set({ location: `{"lat":${lat},"lon":${lon}}` })
   .where(eq(Points.id, id))
   console.log(' updatePointCoordinates done')
 }
 
 export async function updatePointInfo(id: number, name: string, type: string){
-  await db.update(Points)
+  await getDB().update(Points)
   .set({ name: name, type: type })
   .where(eq(Points.id, id)).then(res => console.log('res',res)).catch(err => console.log('err',err));
   console.log(' updatePointInfo done');

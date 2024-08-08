@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   DB_MIGRATIONS_URL: string;
   SITE_NAME: string;
   SESSION_SECRET: string;
+  DB: D1Database;
 }
   
 interface ImportMeta {

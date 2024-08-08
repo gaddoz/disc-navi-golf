@@ -25,10 +25,13 @@ dependencies:
     version: 1.0.2
   drizzle-orm:
     specifier: ^0.31.2
-    version: 0.31.4(@types/better-sqlite3@7.6.11)(better-sqlite3@11.1.2)
+    version: 0.31.4(@cloudflare/workers-types@4.20240806.0)(@types/better-sqlite3@7.6.11)(better-sqlite3@11.1.2)
   leaflet:
     specifier: ^1.9.4
     version: 1.9.4
+  pathe:
+    specifier: ^1.1.2
+    version: 1.1.2
   sass:
     specifier: ^1.77.8
     version: 1.77.8
@@ -40,6 +43,9 @@ dependencies:
     version: 0.4.1(@types/node@20.14.14)(better-sqlite3@11.1.2)(drizzle-orm@0.31.4)(sass@1.77.8)
 
 devDependencies:
+  '@cloudflare/workers-types':
+    specifier: ^4.20240806.0
+    version: 4.20240806.0
   '@types/better-sqlite3':
     specifier: ^7.6.10
     version: 7.6.11
@@ -271,6 +277,9 @@ packages:
     dependencies:
       mime: 3.0.0
     dev: false
+
+  /@cloudflare/workers-types@4.20240806.0:
+    resolution: {integrity: sha512-8lvgrwXGTZEBsUQJ8YUnMk72Anh9omwr6fqWLw/EwVgcw1nQxs/bfdadBEbdP48l9fWXjE4E5XERLUrrFuEpsg==}
 
   /@deno/shim-deno-test@0.5.0:
     resolution: {integrity: sha512-4nMhecpGlPi0cSzT67L+Tm+GOJqvuk8gqHBziqcUQOarnuIax1z96/gJHCSIz2Z0zhxE6Rzwb3IZXPtFh51j+w==}
@@ -2434,7 +2443,7 @@ packages:
         optional: true
     dependencies:
       better-sqlite3: 11.1.2
-      drizzle-orm: 0.31.4(@types/better-sqlite3@7.6.11)(better-sqlite3@11.1.2)
+      drizzle-orm: 0.31.4(@cloudflare/workers-types@4.20240806.0)(@types/better-sqlite3@7.6.11)(better-sqlite3@11.1.2)
     dev: false
 
   /debug@2.6.9:
@@ -2565,7 +2574,7 @@ packages:
       - supports-color
     dev: true
 
-  /drizzle-orm@0.31.4(@types/better-sqlite3@7.6.11)(better-sqlite3@11.1.2):
+  /drizzle-orm@0.31.4(@cloudflare/workers-types@4.20240806.0)(@types/better-sqlite3@7.6.11)(better-sqlite3@11.1.2):
     resolution: {integrity: sha512-VGD9SH9aStF2z4QOTnVlVX/WghV/EnuEzTmsH3fSVp2E4fFgc8jl3viQrS/XUJx1ekW4rVVLJMH42SfGQdjX3Q==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -2654,6 +2663,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
+      '@cloudflare/workers-types': 4.20240806.0
       '@types/better-sqlite3': 7.6.11
       better-sqlite3: 11.1.2
     dev: false

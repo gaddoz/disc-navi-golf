@@ -1,0 +1,9 @@
+name = "disc-navi-golf"
+main = "src/index.ts"
+compatibility_date = "2024-08-06"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "disc-navi-golf-test"
+database_id = "03e9d274-9e22-49ad-91e3-a073c996a48c"

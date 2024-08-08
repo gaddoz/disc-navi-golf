@@ -1,9 +1,10 @@
-export default {
-  dialect: "sqlite",
-  schema: "./drizzle/schema.ts",
-  out: "./drizzle/migrations/",
-  // driver: "better-sqlite",
+import { defineConfig } from 'drizzle-kit';
+import { join } from "pathe";
+export default defineConfig({
+  schema: './drizzle/schema.ts',
+  out: './drizzle/migrations',
+  dialect: 'sqlite',
   dbCredentials: {
-    url: './drizzle/db.sqlite',
+      url: join(process.cwd(), "./drizzle/db.sqlite"),
   },
-};
+});

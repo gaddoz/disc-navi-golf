@@ -7,7 +7,7 @@ export default function Login(props: RouteSectionProps) {
 
   return (
     <main>
-      <h2 class="title">Login</h2>
+      <h2 class="title">login</h2>
       <form action={loginOrRegister} method="post">
         <input
           type="hidden"

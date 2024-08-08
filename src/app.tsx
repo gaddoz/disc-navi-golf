@@ -13,9 +13,19 @@ export default function App() {
         <>
           <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-              <a href="/" class="is-size-3">
-                disc golf course design helper
-              </a>
+              <div style="display: block">
+                <div>
+                  <a href="/" class="is-size-3">
+                    disc navi golf
+                  </a>
+                </div>
+                <p>
+                  {" "}
+                  <a href="/" class="is-size-5">
+                    disc golf course design helper
+                  </a>
+                </p>
+              </div>
             </div>
             <div class="navbar-menu is-size-6 my-auto is-active">
               <div class="navbar-end">

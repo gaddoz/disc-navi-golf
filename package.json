@@ -1,16 +1,19 @@
 {
-  "name": "example-with-drizzle",
+  "name": "disc-navi-golf",
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start",
-    "migrate:gen": "pnpm drizzle-kit generate",
+    "migrate:gen": "npx drizzle-kit generate --config drizzle.config.ts",
     "migrate:run": "pnpm tsx src/migrate.ts",
+    "migrate:prod": "npx wrangler d1 execute disc-navi-golf-prod --remote --file=./fix.sql",
+    "migrate:test": "npx wrangler d1 execute disc-navi-golf-test --remote --file=./fix.sql",
     "bulma:build": "sass --load-path=node_modules ./src/styles/main.scss ./src/styles/main.css",
     "bulma:watch": "npm run bulma:build -- --watch"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240806.0",
     "@types/better-sqlite3": "^7.6.10",
     "@types/node": "^20.14.8",
     "drizzle-kit": "^0.22.7",
@@ -25,6 +28,7 @@
     "bulma": "^1.0.2",
     "drizzle-orm": "^0.31.2",
     "leaflet": "^1.9.4",
+    "pathe": "^1.1.2",
     "sass": "^1.77.8",
     "solid-js": "^1.8.18",
     "vinxi": "^0.4.1"
