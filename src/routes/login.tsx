@@ -6,7 +6,7 @@ export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);
 
   return (
-    <main>
+    <main class="w-full p-4 space-y-2">
       <h2 class="title">login</h2>
       <form action={loginOrRegister} method="post">
         <input

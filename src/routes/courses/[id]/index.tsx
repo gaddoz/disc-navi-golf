@@ -19,19 +19,24 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function CourseIndex({ params }: RouteSectionProps) {
+  const user = createAsync(() => getUser());
   const course = createAsync(() => getCourse(+params.id));
   const points = createAsync(async () => getPoints(+params.id), {
     deferStream: true,
   });
   return (
-    <main class="w-full">
-      <h2 class="title">
+    <main class="w-full p-4 space-y-2">
+      <h2 class="title is-inline mr-2">
         course '{course()?.name} {course()?.id}'
       </h2>
-      <CoursePointsList markers={points()}></CoursePointsList>
+      <CoursePointsList
+        markers={points()}
+        userId={user()?.id}
+      ></CoursePointsList>
       <CoursePointsMap
         markers={points()}
         courseId={course()?.id}
+        userId={user()?.id}
       ></CoursePointsMap>
     </main>
   );

@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, cache, redirect } from "@solidjs/router";
 import { getUser as gU, 
         logout as l, 
         loginOrRegister as lOR, 
@@ -12,7 +12,17 @@ import { getUser as gU,
         updatePointInfo as uPointInfo
     } from "./server";
 
-export const getUser = cache(gU, "user");
+
+export const getUser = cache(async () => {
+    "use server";
+    const user = await gU();
+    if (!user){
+        redirect("/login");
+    }
+    return user;
+  }, "user");
+
+
 export const getCourses = cache(gCourses, "courses");
 export const loginOrRegister = action(lOR, "loginOrRegister");
 export const logout = action(l, "logout");

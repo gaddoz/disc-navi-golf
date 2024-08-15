@@ -21,9 +21,41 @@ $beige-lighter: #eff0eb;
 
 div#main-map {
   min-width: 600px;
-  min-height: 80vh;
+  min-height: calc(100vh - 12rem);
+  height: calc(100vh - 12rem);
 }
 
 form {
   display: inline-block;
+}
+
+header {
+  // border: solid 1px red;
+}
+
+main {
+  min-height: calc(100vh - 12rem);
+}
+
+footer.footer {
+  min-height: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+}
+
+.modal.is-active {
+  z-index: 9999;
+}
+
+@media only screen and (max-width: 1020px) {
+  div#main-map {
+    min-width: 600px;
+    min-height: calc(100vh - 14rem);
+    height: calc(100vh - 14rem);
+  }
+
+  main {
+    min-height: calc(100vh - 14rem);
+  }
 }

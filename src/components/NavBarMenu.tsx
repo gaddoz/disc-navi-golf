@@ -12,7 +12,7 @@ export default function NavBarMenu() {
   const user = createAsync(async () => getUser(), { deferStream: true });
   return (
     <>
-      <Show when={user() == undefined}>
+      <Show when={user()?.id === undefined}>
         <a class="p-2" href="/login">
           login
         </a>
@@ -20,7 +20,7 @@ export default function NavBarMenu() {
           register
         </a>
       </Show>
-      <Show when={user() !== undefined}>
+      <Show when={user()?.id !== undefined}>
         <form action={logout} method="post">
           <button class="link p-2">
             <a class="p-2">logout</a>

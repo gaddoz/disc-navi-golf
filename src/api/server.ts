@@ -62,17 +62,31 @@ export async function logout() {
   throw redirect("/login");
 }
 
-export async function getUser() {
+export async function getSessionUserId(): Promise<number | undefined> {
   const session = await getSession();
-  const userId = session.data.userId;
-  if (userId === undefined) throw redirect("/login");
+  const userSessionData = session.data;
+  if (userSessionData !== undefined)
+  {
+    return session.data.userId;
+  }
+  return undefined;
+}
+
+export async function getUser() {
+  const userId = await getSessionUserId();
+  
+  if(userId === undefined) {
+    return undefined;
+  }
 
   try {
-    const user = await getDB().select().from(Users).where(eq(Users.id, userId)).get();
-    if (!user) throw redirect("/login");
+    const user = await getDB().select().from(Users).where(eq(Users.id, userId as number)).get();
+    if (!user){
+      return undefined;
+    }
     return { id: user.id, username: user.username };
   } catch {
-    throw logout();
+    return undefined;
   }
 }
 

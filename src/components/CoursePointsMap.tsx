@@ -23,7 +23,18 @@ function buildMap(div: HTMLDivElement) {
 
   const uni = 1234;
 
-  currentLocationMarker = L.marker([lcInitLat, lcInitLon], { draggable: true })
+  const currentIcon = L.icon({
+    iconUrl: "/icon-marker-trasp.png",
+    shadowUrl: undefined,
+    iconSize: [50, 50],
+    iconAnchor: [25, 49],
+    popupAnchor: [0, -45],
+  });
+
+  currentLocationMarker = L.marker([lcInitLat, lcInitLon], {
+    draggable: true,
+    icon: currentIcon,
+  })
     .addTo(map)
     .bindPopup(
       `<p class='help is-warning'>your current position is not loaded yet</p>
@@ -43,7 +54,15 @@ function addMarker(
   markerName: string,
   markerType: string
 ) {
-  const marker = L.marker([lat, lon], { draggable: true })
+  const blackIcon = L.icon({
+    iconUrl: "/icon-marker-black.png",
+    shadowUrl: undefined,
+    iconSize: [50, 50],
+    iconAnchor: [25, 49],
+    popupAnchor: [0, -45],
+  });
+
+  const marker = L.marker([lat, lon], { draggable: true, icon: blackIcon })
     .addTo(map)
     .bindPopup(
       `${markerName} (${markerType})
@@ -87,7 +106,13 @@ function addMarkersToMap(
 }
 
 function CoursePointsMap(
-  props: { markers: any | undefined; courseId: number | undefined } | undefined
+  props:
+    | {
+        markers: any | undefined;
+        courseId: number | undefined;
+        userId: number | undefined;
+      }
+    | undefined
 ) {
   const watcher = createGeolocationWatcher(true);
   if (watcher.error) {
@@ -181,53 +206,87 @@ function CoursePointsMap(
 
   return (
     <>
-      <div>
-        <button class="button" onclick={centerMapHandler}>
-          center map by location
+      <div class="is-inline">
+        <button
+          class="button mr-2"
+          onclick={centerMapHandler}
+          title="center map by location"
+        >
+          center
         </button>
-        <button class="button" onClick={() => setShowAddPoint(true)}>
-          new point
-        </button>
+        <Show when={props?.userId !== undefined}>
+          <button
+            class="button mr-2"
+            onClick={() => setShowAddPoint(true)}
+            title="add new point"
+          >
+            new
+          </button>
+        </Show>
       </div>
       <Show when={showAddPoint()}>
-        <div>
-          <div class="field">
-            <label class="label">Point Name</label>
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                name="name"
-                onChange={(e) => {
-                  setPointName(e.target.value);
-                }}
-              />
-            </div>
-          </div>
-          <div class="field">
-            <div class="select is-normal">
-              <select
-                name="type"
-                onChange={(e) => {
-                  setPointType(e.target.value);
-                }}
-                value={pointType()}
-              >
-                <option value="teepad">Teepad</option>
-                <option value="basket">Basket</option>
-                <option value="ob-point">OB point</option>
-                <option value="water-point">Water point</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <button name="new" onclick={handleAddNewPoint} class="button">
-              save point
-            </button>
+        <div class="modal is-active">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">add new point</p>
+              <button
+                class="delete"
+                aria-label="close"
+                onclick={() => setShowAddPoint(false)}
+              ></button>
+            </header>
+            <section class="modal-card-body">
+              <div>
+                <div class="field">
+                  <label class="label">Point Name</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      name="name"
+                      onChange={(e) => {
+                        setPointName(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="select is-normal">
+                    <select
+                      name="type"
+                      onChange={(e) => {
+                        setPointType(e.target.value);
+                      }}
+                      value={pointType()}
+                    >
+                      <option value="teepad">Teepad</option>
+                      <option value="basket">Basket</option>
+                      <option value="ob-point">OB point</option>
+                      <option value="water-point">Water point</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons">
+                <button
+                  name="new"
+                  onclick={() => handleAddNewPoint()}
+                  class="button"
+                >
+                  add new point
+                </button>
+                <button class="button" onclick={() => setShowAddPoint(false)}>
+                  cancel
+                </button>
+              </div>
+            </footer>
           </div>
         </div>
       </Show>
-      <div ref={mapDiv} id="main-map" />
+      <div ref={mapDiv} id="main-map" class="mt-3"></div>
     </>
   );
 }

@@ -11,29 +11,37 @@ export default function App() {
     <Router
       root={(props) => (
         <>
-          <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-              <div style="display: block">
+          <header class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+              <div class="navbar-brand">
                 <div>
-                  <a href="/" class="is-size-3">
-                    disc navi golf
-                  </a>
+                  <div>
+                    <a href="/" class="is-size-3">
+                      disc navi golf
+                    </a>
+                  </div>
+                  <p>
+                    {" "}
+                    <a href="/" class="is-size-5">
+                      disc golf course design helper (early alpha)
+                    </a>
+                  </p>
                 </div>
-                <p>
-                  {" "}
-                  <a href="/" class="is-size-5">
-                    disc golf course design helper
-                  </a>
-                </p>
               </div>
-            </div>
-            <div class="navbar-menu is-size-6 my-auto is-active">
-              <div class="navbar-end">
-                <NavBarMenu></NavBarMenu>
+              <div class="navbar-menu is-size-6 my-auto is-active">
+                <div class="navbar-end">
+                  <NavBarMenu></NavBarMenu>
+                </div>
               </div>
-            </div>
-          </nav>
-          <Suspense>{props.children}</Suspense>
+            </nav>
+          </header>
+          <main class="container">
+            <Suspense>{props.children}</Suspense>
+          </main>
+          <footer class="footer has-text-centered container">
+            disc navi golf - disc golf course design helper (early alpha) - 2024
+            &copy;
+          </footer>
         </>
       )}
     >

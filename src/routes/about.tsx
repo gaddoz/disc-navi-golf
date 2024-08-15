@@ -2,8 +2,8 @@ import { type RouteSectionProps } from "@solidjs/router";
 
 export default function About(props: RouteSectionProps) {
   return (
-    <main class="w-full">
-      <h2 class="title">About</h2>
+    <main class="w-full p-4 space-y-2">
+      <h2 class="title">about</h2>
       <div>
         <p class="is-size-4 help is-warning">
           Disc Golf Course Design Helper is in early alpha version!

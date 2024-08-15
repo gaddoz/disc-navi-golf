@@ -5,10 +5,19 @@
     - now we have a double code: first time loaded markers and locally added markers.
     - also for adding markers we have double code to fix.
     - fix lat lon json to simple two columns!
-- modal for new point
-- modal for marker list?
-- edit marker name and type (now only the location)
-- owner id and collab users
+- [x] modal for new point
+- [x] modal for marker list
+- [] focus points on map from marker list
+- [] fairway group (tee 1, basket 1, tee 2, basket 2...)
+- [x] edit marker name and type (now only the location)
+- [] owner id and collab users
+- [] add good icons and credits, now using (to credit): 
+    - https://www.flaticon.com/free-icon/location_12262901?term=marker&related_id=12262924&origin=search
+- [] forms validation
+
+# Fixes
+- modals close after saving!
+- dev mode login
 
 # SolidStart
 
